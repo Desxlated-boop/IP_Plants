@@ -1,12 +1,16 @@
 # Виртуальное окружение
 venv/
-env/
 
 # Кэш Python
 __pycache__/
 *.py[cod]
+*.pyc
+
+# Кэш pytest
+.pytest_cache/
+
+# Данные (не коммитим)
+data/*.json
 
 # Настройки IDE
-.idea/
 .vscode/
-*.swp
