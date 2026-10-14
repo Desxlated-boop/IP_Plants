@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if plant %}
+        {{ plant.name }} – IP Plants
+    {% else %}
+        Растение не найдено – IP Plants
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if plant %}
+        <div class="card plant-card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">
+                    {{ plant.name|default:"Без названия" }}
+                </h1>
+                <p class="card-text"><strong>ID:</strong> {{ plant.id }}</p>
+                <p class="card-text">
+                    <strong>Вид:</strong>
+                    {{ plant.species|default:"не указан" }}
+                </p>
+                <p class="card-text">
+                    <strong>Интервал полива:</strong>
+                    {{ plant.interval_days }} дн.
+                </p>
+                <p class="card-text">
+                    <strong>Последний полив:</strong>
+                    {{ plant.last_watered_date|date:"d.m.Y" }}
+                </p>
+                <p class="card-text">
+                    <strong>Следующий полив:</strong>
+                    {{ plant.next_watering_date|date:"d.m.Y" }}
+                </p>
+                <p class="card-text">
+                    <strong>Владелец:</strong>
+                    {% if plant.owner %}
+                        <a href="{% url 'owners:detail' plant.owner.id %}">
+                            {{ plant.owner.name }}
+                        </a>
+                    {% else %}
+                        не указан
+                    {% endif %}
+                </p>
+                <p class="card-text">
+                    <strong>Место:</strong>
+                    {% if plant.location %}
+                        <a href="{% url 'locations:detail' plant.location.id %}">
+                            {{ plant.location.name }}
+                        </a>
+                        (свет: {{ plant.location.light }})
+                    {% else %}
+                        не указано
+                    {% endif %}
+                </p>
+                <p class="card-text">
+                    Статус сегодня:
+                    {% include "plants/includes/watering_status.html" %}
+                </p>
+            </div>
+        </div>
+
+        <h2 class="h4">История поливов ({{ waterings|length }})</h2>
+        <ul class="list-group">
+            {% for log in waterings %}
+                <li class="list-group-item">
+                    {{ log.watered_on }} – {{ log.note|default:"без заметки" }}
+                </li>
+            {% empty %}
+                <li class="list-group-item">Записей пока нет.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1 class="text-danger">Растение не найдено</h1>
+        <p>Растение с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a
+        href="{% url 'plants:list' %}"
+        class="btn btn-outline-secondary mt-3"
+    >
+        ← к списку растений
+    </a>
+{% endblock %}

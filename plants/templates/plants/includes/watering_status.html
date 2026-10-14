@@ -1,0 +1,9 @@
+{% if plant.id in thirsty_ids %}
+    <span class="badge bg-warning text-dark watering-status watering-status-thirsty">
+        Пора поливать
+    </span>
+{% else %}
+    <span class="badge bg-success watering-status watering-status-ok">
+        Полив не нужен
+    </span>
+{% endif %}

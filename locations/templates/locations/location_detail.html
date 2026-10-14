@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if location %}
+        {{ location.name }} – IP Plants
+    {% else %}
+        Место не найдено – IP Plants
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if location %}
+        <h1>{{ location.name }}</h1>
+        <p>Освещённость: {{ location.light }}</p>
+        <h2 class="h4">Растения в этом месте ({{ plants|length }})</h2>
+        {% for plant in plants %}
+            {% include "plants/includes/plant_card.html" %}
+        {% empty %}
+            <p>Здесь пока нет растений.</p>
+        {% endfor %}
+    {% else %}
+        <h1 class="text-danger">Место не найдено</h1>
+        <p>Место с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a
+        href="{% url 'locations:list' %}"
+        class="btn btn-outline-secondary mt-3"
+    >
+        ← к списку мест
+    </a>
+{% endblock %}

@@ -1,0 +1,32 @@
+<article class="card plant-card mb-3">
+    <div class="card-body">
+        <h2 class="card-title h4">
+            {{ plant.name|default:"Без названия" }}
+        </h2>
+        <p class="card-text">
+            Вид: {{ plant.species|default:"не указан" }}<br>
+            Полив каждые {{ plant.interval_days }} дн.<br>
+            {% if plant.owner %}
+                Владелец:
+                <a href="{% url 'owners:detail' plant.owner.id %}">
+                    {{ plant.owner.name }}
+                </a><br>
+            {% endif %}
+            {% if plant.location %}
+                Место:
+                <a href="{% url 'locations:detail' plant.location.id %}">
+                    {{ plant.location.name }}
+                </a>
+            {% endif %}
+        </p>
+        <p class="card-text">
+            {% include "plants/includes/watering_status.html" %}
+        </p>
+        <a
+            href="{% url 'plants:detail' plant.id %}"
+            class="btn btn-primary"
+        >
+            Подробнее
+        </a>
+    </div>
+</article>

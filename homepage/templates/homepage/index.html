@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Главная – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-4">IP Plants</h1>
+    <p class="lead">Сервис учета домашних коллекций растений.</p>
+    <p>
+        Ведите коллекцию комнатных растений, следите за графиком полива
+        и смотрите, какие растения пора поливать сегодня.
+    </p>
+
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            Растений в коллекции: <strong>{{ plants_count }}</strong>
+        </li>
+        <li class="list-group-item">
+            Владельцев: <strong>{{ owners_count }}</strong>
+        </li>
+        <li class="list-group-item">
+            Мест: <strong>{{ locations_count }}</strong>
+        </li>
+        <li class="list-group-item">
+            {% if thirsty_count %}
+                Сегодня пора поливать:
+                <span class="badge bg-warning text-dark">
+                    {{ thirsty_count }}
+                </span>
+            {% else %}
+                Сегодня поливать никого не нужно.
+            {% endif %}
+        </li>
+    </ul>
+
+    <a href="{% url 'plants:list' %}" class="btn btn-primary me-2">
+        Растения
+    </a>
+    <a href="{% url 'plants:thirsty' %}" class="btn btn-secondary">
+        Пора поливать
+    </a>
+{% endblock %}

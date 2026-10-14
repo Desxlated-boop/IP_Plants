@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Журнал поливов – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1>Журнал поливов</h1>
+    <p>Всего записей: {{ logs|length }}</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Растение</th>
+                <th>Заметка</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.watered_on }}</td>
+                    <td>
+                        <a href="{% url 'plants:detail' log.plant.id %}">
+                            {{ log.plant.name }}
+                        </a>
+                    </td>
+                    <td>{{ log.note|default:"—" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Записей пока нет.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Места – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1>Места</h1>
+    <p>Всего мест: {{ locations|length }}</p>
+    {% for location in locations %}
+        <article class="card plant-card mb-3">
+            <div class="card-body">
+                <h2 class="card-title h4">{{ location.name }}</h2>
+                <p class="card-text">Освещённость: {{ location.light }}</p>
+                <a
+                    href="{% url 'locations:detail' location.id %}"
+                    class="btn btn-primary"
+                >
+                    Растения в этом месте
+                </a>
+            </div>
+        </article>
+    {% empty %}
+        <p>Места не найдены.</p>
+    {% endfor %}
+{% endblock %}

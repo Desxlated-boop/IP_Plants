@@ -1,0 +1,9 @@
+# добавить в конец .gitignore (если этих строк ещё нет)
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+db.sqlite3
+.idea/
+.vscode/

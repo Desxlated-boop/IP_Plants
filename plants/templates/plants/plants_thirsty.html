@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Пора поливать – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1>Пора поливать</h1>
+    <p>Дата проверки: {{ today|date:"d.m.Y" }}</p>
+    {% for plant in plants %}
+        {% include "plants/includes/plant_card.html" %}
+    {% empty %}
+        <p>Полив не требуется.</p>
+    {% endfor %}
+{% endblock %}

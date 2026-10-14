@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Растения – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1>Растения</h1>
+    <p>Всего растений: {{ plants|length }}</p>
+    {% for plant in plants %}
+        {% include "plants/includes/plant_card.html" %}
+    {% empty %}
+        <p>Растения не найдены.</p>
+    {% endfor %}
+{% endblock %}

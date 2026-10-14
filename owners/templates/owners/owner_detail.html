@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if owner %}
+        {{ owner.name }} – IP Plants
+    {% else %}
+        Владелец не найден – IP Plants
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if owner %}
+        <h1>{{ owner.name }}</h1>
+        <p>E-mail: {{ owner.email|default:"не указан" }}</p>
+        <h2 class="h4">Растения владельца ({{ plants|length }})</h2>
+        {% for plant in plants %}
+            {% include "plants/includes/plant_card.html" %}
+        {% empty %}
+            <p>У владельца пока нет растений.</p>
+        {% endfor %}
+    {% else %}
+        <h1 class="text-danger">Владелец не найден</h1>
+        <p>Владелец с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a
+        href="{% url 'owners:list' %}"
+        class="btn btn-outline-secondary mt-3"
+    >
+        ← к списку владельцев
+    </a>
+{% endblock %}

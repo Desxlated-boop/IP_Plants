@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Владельцы – IP Plants
+{% endblock %}
+
+{% block content %}
+    <h1>Владельцы</h1>
+    <p>Всего владельцев: {{ owners|length }}</p>
+    {% for owner in owners %}
+        <article class="card plant-card mb-3">
+            <div class="card-body">
+                <h2 class="card-title h4">{{ owner.name }}</h2>
+                <p class="card-text">{{ owner.email|default:"e-mail не указан" }}</p>
+                <a
+                    href="{% url 'owners:detail' owner.id %}"
+                    class="btn btn-primary"
+                >
+                    Растения владельца
+                </a>
+            </div>
+        </article>
+    {% empty %}
+        <p>Владельцы не найдены.</p>
+    {% endfor %}
+{% endblock %}

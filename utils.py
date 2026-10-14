@@ -1,4 +1,6 @@
+"""Вспомогательные функции: безопасный ввод и генерация идентификаторов."""
 from datetime import datetime
+from typing import Any, Iterable
 
 
 def input_int(prompt: str) -> int:
@@ -22,3 +24,8 @@ def input_date(prompt: str) -> str:
         except ValueError:
             print(
                 "Ошибка: формат ГГГГ-ММ-ДД (пример: 2026-09-20).")
+
+
+def next_id(items: Iterable[Any]) -> int:
+    """Вернуть следующий свободный числовой идентификатор."""
+    return max((item.id for item in items), default=0) + 1

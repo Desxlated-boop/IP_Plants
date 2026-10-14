@@ -1,0 +1,33 @@
+body {
+    min-height: 100vh;
+    background-color: #f4f8f2;
+}
+
+.plantly-logo {
+    width: 96px;
+    height: auto;
+    margin: 1rem 0 0.5rem;
+}
+
+.plant-card {
+    border-left: 6px solid #4f9d5d;
+    border-radius: 8px;
+}
+
+.watering-status {
+    font-weight: 600;
+}
+
+.watering-status-thirsty {
+    border: 1px solid #b58105;
+}
+
+.watering-status-ok {
+    border: 1px solid #2f6f3a;
+}
+
+footer {
+    color: #5f6f62;
+    border-top: 1px solid #d5e2d2;
+    padding-top: 0.75rem;
+}
