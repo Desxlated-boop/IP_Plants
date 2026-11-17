@@ -1,5 +1,19 @@
-"""Django-модели приложения waterings.
+"""Записи о поливе."""
+from django.db import models
 
-Django ORM пока не используется: данные берутся из JSON-файлов,
-а классы предметной области находятся в пакете models/.
-"""
+
+class WateringLog(models.Model):
+    plant = models.ForeignKey(
+        "plants.Plant", on_delete=models.PROTECT, related_name="waterings",
+        verbose_name="Растение",
+    )
+    watered_on = models.DateField("Дата полива")
+    note = models.TextField("Заметка", blank=True)
+
+    class Meta:
+        ordering = ["-watered_on", "-pk"]
+        verbose_name = "Полив"
+        verbose_name_plural = "Поливы"
+
+    def __str__(self):
+        return f"{self.plant} — {self.watered_on}"

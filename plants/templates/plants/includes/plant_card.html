@@ -23,7 +23,7 @@
             {% include "plants/includes/watering_status.html" %}
         </p>
         <a
-            href="{% url 'plants:detail' plant.id %}"
+            href="{{ plant.get_absolute_url }}"
             class="btn btn-primary"
         >
             Подробнее

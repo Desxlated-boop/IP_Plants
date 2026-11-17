@@ -37,6 +37,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+INTERNAL_IPS = ["127.0.0.1"]
+
 ROOT_URLCONF = "plantly.urls"
 
 TEMPLATES = [
@@ -49,6 +55,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "plants.context_processors.collection_summary",
             ],
         },
     },

@@ -4,6 +4,7 @@ from datetime import date
 from models import Plant, WateringLog
 from models.waterings import (
     add_watering,
+    find_watering_by_id,
     find_waterings_for_plant,
     sort_waterings,
 )
@@ -44,3 +45,11 @@ def test_find_and_sort_waterings():
     own = find_waterings_for_plant(logs, plant.id)
     assert [log.watered_on for log in own] == ["2026-10-05", "2026-10-02"]
     assert sort_waterings(logs)[0].watered_on == "2026-10-05"
+
+
+def test_find_watering_by_id():
+    plant = make_plant()
+    logs = [WateringLog(3, plant, "2026-10-02")]
+    assert find_watering_by_id(logs, 3) is logs[0]
+    assert find_watering_by_id(logs, 999) is None
+    assert find_watering_by_id([], 3) is None

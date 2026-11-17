@@ -7,3 +7,4 @@ class WateringsConfig(AppConfig):
 
     default_auto_field = "django.db.models.BigAutoField"
     name = "waterings"
+    verbose_name = "Поливы"

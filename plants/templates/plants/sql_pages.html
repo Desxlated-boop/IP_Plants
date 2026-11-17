@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Коллекция и статистика – IP Plants{% endblock %}
+{% block content %}
+<h1>Коллекция и статистика</h1>
+<nav class="mb-3"><a href="{% url 'plants:database_plants' %}">Растения</a> · <a href="{% url 'plants:database_waterings' %}">Журнал</a> · <a href="{% url 'plants:database_search' %}">Поиск полива</a> · <a href="{% url 'plants:database_stats' %}">Статистика</a></nav>
+{% if section == 'all' or section == 'catalog' %}
+<h2 id="catalog">Растения</h2>
+<ul>{% for plant in plants %}<li>{{ plant.name }} — {{ plant.species }}; владелец: {{ plant.owner|default:"не указан" }}; место: {{ plant.location|default:"не указано" }}</li>{% empty %}<li>Растений пока нет.</li>{% endfor %}</ul>
+{% endif %}
+{% if section == 'all' or section == 'journal' %}
+<h2 id="journal">Журнал поливов</h2>
+<ul>{% for log in waterings %}<li>{{ log.watered_on }} — {{ log.plant }}: {{ log.note|default:"без заметки" }}</li>{% empty %}<li>Записей пока нет.</li>{% endfor %}</ul>
+{% endif %}
+{% if section == 'all' or section == 'search' %}
+<h2 id="search">Какие растения полить к дате</h2>
+<form method="get"><label for="date">Дата:</label> <input id="date" name="date" type="date" value="{{ selected_date }}" required> <button type="submit" class="btn btn-primary">Найти</button></form>
+{% if error %}<p class="text-danger">{{ error }}</p>{% else %}<ul>{% for plant in due %}<li>{{ plant.name }} — дата следующего полива: {{ plant.next_watering }}</li>{% empty %}<li>К выбранной дате полив не требуется.</li>{% endfor %}</ul>{% endif %}
+{% endif %}
+{% if section == 'all' or section == 'stats' %}
+<h2 id="stats">Статистика</h2>
+<p>Растений: {{ plant_total }}. Записей полива: {{ watering_total }}.</p>
+<h3>Растения по владельцам</h3><ul>{% for row in by_owner %}<li>{{ row.name }}: {{ row.total }}</li>{% empty %}<li>Владельцев нет.</li>{% endfor %}</ul>
+<h3>Растения по местам</h3><ul>{% for row in by_location %}<li>{{ row.name }}: {{ row.total }}</li>{% empty %}<li>Мест нет.</li>{% endfor %}</ul>
+<h3>Растения с записями полива</h3><ul>{% for row in by_watering %}<li>{{ row.name }}: {{ row.total }}</li>{% empty %}<li>Записей нет.</li>{% endfor %}</ul>
+<h3>Растения при ярком освещении</h3><ul>{% for row in light_plants %}<li>{{ row.name }} — {{ row.location }}</li>{% empty %}<li>Таких растений нет.</li>{% endfor %}</ul>
+<h3>Последние три полива</h3><ul>{% for row in recent %}<li>{{ row.watered_on }} — {{ row.plant }}</li>{% empty %}<li>Записей нет.</li>{% endfor %}</ul>
+<h3>Связи растений</h3><ul>{% for row in plant_details %}<li>{{ row.name }} — {{ row.owner|default:"без владельца" }}, {{ row.location|default:"без места" }}</li>{% empty %}<li>Растений нет.</li>{% endfor %}</ul>
+<h3>Поливы и владельцы</h3><ul>{% for row in watering_details %}<li>{{ row.watered_on }} — {{ row.plant }}, {{ row.owner|default:"без владельца" }}</li>{% empty %}<li>Записей нет.</li>{% endfor %}</ul>
+{% endif %}
+{% endblock %}

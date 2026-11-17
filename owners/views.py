@@ -5,8 +5,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from homepage.data import load_data
-from models.owners import find_owner_by_id
-from models.plants import filter_plants_by_owner, get_plants_needing_water
+from models.plants import get_plants_needing_water
 
 
 def owner_list(request: HttpRequest) -> HttpResponse:
@@ -18,11 +17,11 @@ def owner_list(request: HttpRequest) -> HttpResponse:
 def owner_detail(request: HttpRequest, owner_id: int) -> HttpResponse:
     """Страница /owners/<id>/: владелец и его растения."""
     owners, _, plants, _ = load_data()
-    owner = find_owner_by_id(owners, owner_id)
+    owner = owners.filter(pk=owner_id).first()
     own_plants = []
     thirsty_ids = set()
     if owner is not None:
-        own_plants = filter_plants_by_owner(plants, owner.id)
+        own_plants = plants.filter(owner_id=owner.id)
         thirsty = get_plants_needing_water(own_plants, date.today())
         thirsty_ids = {plant.id for plant in thirsty}
     context = {

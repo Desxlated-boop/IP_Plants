@@ -1,6 +1,6 @@
 """Класс WateringLog (запись о поливе) и функции журнала поливов."""
 from datetime import date
-from typing import List
+from typing import List, Optional
 
 from utils import next_id
 
@@ -48,6 +48,17 @@ def add_watering(
     if log.watered_on >= plant.last_watered:
         plant.water(watered_on)
     return log
+
+
+def find_watering_by_id(
+    logs: List[WateringLog],
+    log_id: int,
+) -> Optional[WateringLog]:
+    """Найти запись о поливе по идентификатору."""
+    for log in logs:
+        if log.id == log_id:
+            return log
+    return None
 
 
 def find_waterings_for_plant(

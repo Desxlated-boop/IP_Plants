@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Статистика ORM – IP Plants{% endblock %}
+{% block content %}
+    <h1>Статистика коллекции</h1>
+    <p>Растений: {{ plant_total }}. Поливов: {{ watering_total }}.</p>
+    <p>С интервалом полива меньше двух недель: {{ frequent_total }}.</p>
+    <h2>Растения по владельцам</h2>
+    <ul>{% for owner in owners %}<li>{{ owner.name }}: {{ owner.plant_count }}</li>{% empty %}<li>Владельцев нет.</li>{% endfor %}</ul>
+    <h2>Растения по местам</h2>
+    <ul>{% for location in locations %}<li>{{ location.name }}: {{ location.plant_count }}</li>{% empty %}<li>Мест нет.</li>{% endfor %}</ul>
+    <h2>Поливы по растениям</h2>
+    <ul>{% for plant in plants %}<li>{{ plant.name }}: {{ plant.watering_count }}</li>{% empty %}<li>Растений нет.</li>{% endfor %}</ul>
+{% endblock %}

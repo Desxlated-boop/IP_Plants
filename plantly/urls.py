@@ -1,5 +1,6 @@
 """Корневая маршрутизация проекта Plantly."""
 from django.contrib import admin
+from django.conf import settings
 from django.urls import include, path
 
 urlpatterns = [
@@ -10,5 +11,8 @@ urlpatterns = [
     path("locations/", include("locations.urls")),
     path("waterings/", include("waterings.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
 
 handler404 = "homepage.views.page_not_found"

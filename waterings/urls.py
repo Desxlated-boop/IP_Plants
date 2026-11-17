@@ -7,4 +7,5 @@ app_name = "waterings"
 
 urlpatterns = [
     path("", views.watering_list, name="list"),
+    path("<int:log_id>/", views.watering_detail, name="detail"),
 ]

@@ -64,7 +64,10 @@
         <ul class="list-group">
             {% for log in waterings %}
                 <li class="list-group-item">
-                    {{ log.watered_on }} – {{ log.note|default:"без заметки" }}
+                    <a href="{% url 'waterings:detail' log.id %}">
+                        Полив №{{ log.id }} от {{ log.watered_on }}
+                    </a>
+                    – {{ log.note|default:"без заметки" }}
                 </li>
             {% empty %}
                 <li class="list-group-item">Записей пока нет.</li>

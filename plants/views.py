@@ -3,10 +3,11 @@ from datetime import date
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 
 from homepage.data import load_data
-from models.plants import find_plant_by_id, get_plants_needing_water
-from models.waterings import find_waterings_for_plant
+from models.plants import get_plants_needing_water
+from plants.models import Plant
 
 
 def plant_list(request: HttpRequest) -> HttpResponse:
@@ -36,11 +37,11 @@ def plants_thirsty(request: HttpRequest) -> HttpResponse:
 def plant_detail(request: HttpRequest, plant_id: int) -> HttpResponse:
     """Страница /plants/<id>/: растение, связи и история поливов."""
     _, _, plants, logs = load_data()
-    plant = find_plant_by_id(plants, plant_id)
+    plant = plants.filter(pk=plant_id).first()
     thirsty_ids = set()
     history = []
     if plant is not None:
-        history = find_waterings_for_plant(logs, plant.id)
+        history = logs.filter(plant_id=plant.id)
         if plant.needs_watering(date.today()):
             thirsty_ids.add(plant.id)
     context = {
@@ -54,3 +55,9 @@ def plant_detail(request: HttpRequest, plant_id: int) -> HttpResponse:
         context,
         status=404 if plant is None else 200,
     )
+
+
+def plant_detail_slug(request: HttpRequest, slug: str) -> HttpResponse:
+    """Открыть растение по постоянному текстовому адресу."""
+    plant = get_object_or_404(Plant, slug=slug)
+    return plant_detail(request, plant.pk)

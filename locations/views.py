@@ -5,11 +5,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from homepage.data import load_data
-from models.locations import find_location_by_id
-from models.plants import (
-    filter_plants_by_location,
-    get_plants_needing_water,
-)
+from models.plants import get_plants_needing_water
 
 
 def location_list(request: HttpRequest) -> HttpResponse:
@@ -28,11 +24,11 @@ def location_detail(
 ) -> HttpResponse:
     """Страница /locations/<id>/: место и растения в нём."""
     _, locations, plants, _ = load_data()
-    location = find_location_by_id(locations, location_id)
+    location = locations.filter(pk=location_id).first()
     local_plants = []
     thirsty_ids = set()
     if location is not None:
-        local_plants = filter_plants_by_location(plants, location.id)
+        local_plants = plants.filter(location_id=location.id)
         thirsty = get_plants_needing_water(local_plants, date.today())
         thirsty_ids = {plant.id for plant in thirsty}
     context = {

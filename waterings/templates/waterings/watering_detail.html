@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if log %}
+        Полив №{{ log.id }} – IP Plants
+    {% else %}
+        Запись о поливе не найдена – IP Plants
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if log %}
+        <div class="card plant-card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">Полив №{{ log.id }}</h1>
+                <p class="card-text">
+                    <strong>Дата полива:</strong> {{ log.watered_on }}
+                </p>
+                <p class="card-text">
+                    <strong>Растение:</strong>
+                    <a href="{% url 'plants:detail' log.plant.id %}">
+                        {{ log.plant.name|default:"Без названия" }}
+                    </a>
+                </p>
+                <p class="card-text">
+                    <strong>Владелец растения:</strong>
+                    {% if log.plant.owner %}
+                        <a href="{% url 'owners:detail' log.plant.owner.id %}">
+                            {{ log.plant.owner.name }}
+                        </a>
+                    {% else %}
+                        не указан
+                    {% endif %}
+                </p>
+                <p class="card-text">
+                    <strong>Место растения:</strong>
+                    {% if log.plant.location %}
+                        <a href="{% url 'locations:detail' log.plant.location.id %}">
+                            {{ log.plant.location.name }}
+                        </a>
+                    {% else %}
+                        не указано
+                    {% endif %}
+                </p>
+                <p class="card-text">
+                    <strong>Заметка:</strong>
+                    {{ log.note|default:"без заметки" }}
+                </p>
+                <p class="card-text">
+                    <strong>Статус растения сегодня:</strong>
+                    {% include "plants/includes/watering_status.html" with plant=log.plant %}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-danger">Запись о поливе не найдена</h1>
+        <p>Запись с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a
+        href="{% url 'waterings:list' %}"
+        class="btn btn-outline-secondary mt-3"
+    >
+        ← к журналу поливов
+    </a>
+{% endblock %}

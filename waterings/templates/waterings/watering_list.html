@@ -6,31 +6,75 @@
 
 {% block content %}
     <h1>Журнал поливов</h1>
-    <p>Всего записей: {{ logs|length }}</p>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Растение</th>
-                <th>Заметка</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for log in logs %}
+    <form method="get" class="mb-3">
+        <label>Растение <input name="q" value="{{ query }}"></label>
+        <label>Владелец <select name="owner"><option value="">Все</option>
+            {% for owner in owners %}<option value="{{ owner.id }}" {% if owner.id|stringformat:'s' == owner_id %}selected{% endif %}>{{ owner.name }}</option>{% endfor %}
+        </select></label>
+        <label>Растение <select name="plant"><option value="">Все</option>
+            {% for plant in plants %}<option value="{{ plant.id }}" {% if plant.id|stringformat:'s' == plant_id %}selected{% endif %}>{{ plant.name }}</option>{% endfor %}
+        </select></label>
+        <label>С <input type="date" name="date_from" value="{{ date_from }}"></label>
+        <label>По <input type="date" name="date_to" value="{{ date_to }}"></label>
+        <label>Сортировка
+            <select name="sort">
+                <option value="newest">Сначала новые</option>
+                <option value="oldest" {% if sorting == 'oldest' %}selected{% endif %}>Сначала старые</option>
+            </select>
+        </label>
+        <button type="submit" class="btn btn-primary">Показать</button>
+    </form>
+    {% if error %}<p class="text-danger">{{ error }}</p>{% endif %}
+    <p>Всего записей: {{ page.paginator.count }}</p>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ log.watered_on }}</td>
-                    <td>
-                        <a href="{% url 'plants:detail' log.plant.id %}">
-                            {{ log.plant.name }}
-                        </a>
-                    </td>
-                    <td>{{ log.note|default:"—" }}</td>
+                    <th>Запись</th>
+                    <th>Дата</th>
+                    <th>Растение</th>
+                    <th>Владелец растения</th>
+                    <th>Статус растения сегодня</th>
+                    <th>Заметка</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">Записей пока нет.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'waterings:detail' log.id %}">
+                                Полив №{{ log.id }}
+                            </a>
+                        </td>
+                        <td>{{ log.watered_on }}</td>
+                        <td>
+                            <a href="{% url 'plants:detail' log.plant.id %}">
+                                {{ log.plant.name }}
+                            </a>
+                        </td>
+                        <td>{{ log.plant.owner.name|default:"не указан" }}</td>
+                        <td>
+                            {% include "plants/includes/watering_status.html" with plant=log.plant %}
+                        </td>
+                        <td>{{ log.note|default:"—" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Записей пока нет.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if page.paginator.num_pages > 1 %}
+        <nav aria-label="Страницы журнала">
+            {% if page.has_previous %}
+                <a href="?{{ page_params }}&amp;page={{ page.previous_page_number }}">Назад</a>
+            {% endif %}
+            Страница {{ page.number }} из {{ page.paginator.num_pages }}
+            {% if page.has_next %}
+                <a href="?{{ page_params }}&amp;page={{ page.next_page_number }}">Далее</a>
+            {% endif %}
+        </nav>
+    {% endif %}
 {% endblock %}
